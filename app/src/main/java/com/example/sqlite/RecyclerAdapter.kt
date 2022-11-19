@@ -7,7 +7,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
 class RecyclerAdapter(
-    private val list: List<String>,
+    private val list: List<Contact>,
     // передаём коллбек нажатия на кнопку
     private val onItemDelete: (id: Int) -> Unit
 ) : RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
@@ -18,10 +18,10 @@ class RecyclerAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.textView.text = list[position]
+        holder.textView.text = list[position].name
         // обработчик нажатия кнопки
         holder.button.setOnClickListener {
-            onItemDelete(holder.adapterPosition)
+            onItemDelete(list[position].id)
         }
     }
 

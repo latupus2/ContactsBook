@@ -5,11 +5,12 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
+import android.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
 class MainActivity : AppCompatActivity() {
-    private lateinit var enterText: EditText
+    private lateinit var searchText: SearchView
     private lateinit var buttonAdd: Button
     private lateinit var listText: RecyclerView
 
@@ -26,51 +27,39 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        enterText = findViewById<EditText>(R.id.enterText)
+        searchText = findViewById<SearchView>(R.id.searchText)
         buttonAdd = findViewById<Button>(R.id.buttonAdd)
         listText = findViewById<RecyclerView>(R.id.recyclerView)
 
-        //val list = mutableListOf<String>()
-        //val adapter = RecyclerAdapter(list)
-
-        adapter = RecyclerAdapter(list)  {
-            // адаптеру передали обработчик удаления элемента
-            if(it != -1){
-            val name = list[it]
-            list.removeAt(it)
-            adapter.notifyItemRemoved(it)
-
-
-            val listTod = dbHelper.getTodos()
-            for (todo in listTod) {
-                if(todo.title == name) {
-                    dbHelper.removeTodo(todo.id)
-                }
-            }
+        adapter = RecyclerAdapter(dbHelper.getContacts()) {
+            val intent = Intent(this, ContactActivity::class.java)
+            intent.putExtra(EXTRA_KEY, it.toString())
+            startActivity(intent)
 
         }
-        }
+
 
         listText.layoutManager = LinearLayoutManager(this)
         listText.adapter = adapter
 
-        val listTod = dbHelper.getTodos()
-        for (todo in listTod) {
-            list.add(todo.title)
+        val listContacts = dbHelper.getContacts()
+        adapter.notifyItemInserted(dbHelper.getContacts().lastIndex)
+        /*for (contact in listContacts) {
+            list.add(contact.name + " " + contact.surname)
             adapter.notifyItemInserted(list.lastIndex)
-        }
+        }*/
 
-        buttonAdd.setOnClickListener {
-            dbHelper.addTodo(enterText.text.toString())
-            val listTod = dbHelper.getTodos()
+        /*buttonAdd.setOnClickListener {
+            dbHelper.addContact(enterText.text.toString(), "", "", "")
+            val listTod = dbHelper.getContacts()
             val s = StringBuilder()
             for (todo in listTod) {
-                s.append("${todo.id} ${todo.title}\n")
+                s.append("${todo.id} ${todo.name}\n")
             }
             list.add(enterText.text.toString())
             adapter.notifyItemInserted(list.lastIndex)
             enterText.setText("")
-        }
+        }*/
 
     }
 }
