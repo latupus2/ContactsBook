@@ -11,23 +11,28 @@ class RecyclerAdapter(
     // передаём коллбек нажатия на кнопку
     private val onItemDelete: (id: Int) -> Unit
 ) : RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
+
+
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val itemView = LayoutInflater.from(parent.context)
-            .inflate(R.layout.list_item, parent, false)
-        return ViewHolder(itemView)
+            val itemView = LayoutInflater.from(parent.context)
+                .inflate(R.layout.list_item, parent, false)
+            return ViewHolder(itemView)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.textView.text = list[position].name
-        // обработчик нажатия кнопки
-        holder.button.setOnClickListener {
-            onItemDelete(list[position].id)
-        }
+            holder.textView.text = (list[position].name + " " + list[position].surname)
+            // обработчик нажатия кнопки
+            holder.button.setOnClickListener {
+                onItemDelete(list[position].id)
+            }
+
     }
 
     override fun getItemCount(): Int {
         return list.size
     }
+
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val textView = itemView.findViewById<TextView>(R.id.textView)

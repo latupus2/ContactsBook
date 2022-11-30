@@ -38,7 +38,7 @@ class DBHelper(context: Context?) :
         onCreate(db)
     }
 
-    fun getContacts(): List<Contact> {
+    fun getContacts(): MutableList<Contact> {
         val result = mutableListOf<Contact>()
         val database = this.writableDatabase
         val cursor: Cursor = database.query(
