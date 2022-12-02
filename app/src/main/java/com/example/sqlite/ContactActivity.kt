@@ -47,17 +47,15 @@ class ContactActivity : AppCompatActivity() {
         buttonDelete = findViewById<Button>(R.id.buttonDelete)
         buttonEdit = findViewById<Button>(R.id.buttonEdit)
 
-        val listContacts = dbHelper.getContacts()
-        for (contact in listContacts) {
-            if (contact.id.toString() == id) {
-                name.text = contact.name
-                surname.text = contact.surname
-                birthData.text = contact.birthData
-                phone.text = contact.phoneNumber
-                break
-            }
+        val contact = (dbHelper.getById(id.toString().toInt()))
 
-        }
+        name.text = contact?.name
+        surname.text = contact?.surname
+        birthData.text = contact?.birthData
+        phone.text = contact?.phoneNumber
+
+
+
 
         phone.setOnClickListener {
             val intent = Intent(Intent.ACTION_CALL, Uri.parse("tel:" + phone.text))

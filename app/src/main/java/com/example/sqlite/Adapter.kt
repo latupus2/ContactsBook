@@ -103,4 +103,30 @@ class DBHelper(context: Context?) :
         database.delete(TABLE_NAME, null, null)
         close()
     }
+    fun getById(id: Int): Contact? {
+        var result: Contact? = null
+        val database = this.writableDatabase
+        val cursor: Cursor = database.query(
+            TABLE_NAME, null, "$KEY_ID = ?", arrayOf(id.toString()),
+            null, null, null
+        )
+        if (cursor.moveToFirst()) {
+            val idIndex: Int = cursor.getColumnIndex(KEY_ID)
+            val nameIndex: Int = cursor.getColumnIndex(KEY_NAME)
+            val surnameIndex: Int = cursor.getColumnIndex(KEY_SURNAME)
+            val birthIndex: Int = cursor.getColumnIndex(KEY_BIRTHDATA)
+            val phoneIndex: Int = cursor.getColumnIndex(KEY_PHONENUMBER)
+            val isDoneIndex: Int = cursor.getColumnIndex(KEY_IS_DONE)
+            result = Contact(
+                cursor.getInt(idIndex),
+                cursor.getString(nameIndex),
+                cursor.getString(surnameIndex),
+                cursor.getString(birthIndex),
+                cursor.getString(phoneIndex),
+                cursor.getInt(isDoneIndex) == 1
+            )
+        }
+        cursor.close()
+        return result
+    }
 }

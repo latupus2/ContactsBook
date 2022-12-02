@@ -66,14 +66,7 @@ class MainActivity : AppCompatActivity() {
         if(text == ""){
             changeList()
         }else {
-            var contactList = dbHelper.getContacts()
-            list.clear()
-            for (contact in contactList) {
-                if ((contact.name.toLowerCase()+" "+ contact.surname.toLowerCase()).contains(text.toLowerCase())) {
-                    list.add(contact)
-
-                }
-            }
+            list = (dbHelper.getContacts().filter { (it.name+" "+it.surname).contains(text, ignoreCase = true)}).toMutableList()
             changeListFiltered(list)
         }
     }

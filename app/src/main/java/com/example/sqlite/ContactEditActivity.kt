@@ -42,17 +42,11 @@ class ContactEditActivity : AppCompatActivity() {
         save= findViewById<Button>(R.id.buttonSave)
 
         if(id != -1){
-            val listContacts = dbHelper.getContacts()
-            for (contact in listContacts) {
-                if (contact.id == id) {
-                    name.setText(contact.name)
-                    surname.setText(contact.surname)
-                    birthData.setText(contact.birthData)
-                    phone.setText(contact.phoneNumber)
-                    break
-                }
-
-            }
+            val contact = dbHelper.getById(id)
+            name.setText(contact?.name)
+            surname.setText(contact?.surname)
+            birthData.setText(contact?.birthData)
+            phone.setText(contact?.phoneNumber)
         }
 
         save.setOnClickListener {
