@@ -28,6 +28,8 @@ class MainActivity : AppCompatActivity() {
     private val dbHelper = DBHelper(this)
     lateinit var list: MutableList<Contact>
 
+    lateinit var allContacts: MutableList<Contact>
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,6 +39,7 @@ class MainActivity : AppCompatActivity() {
         buttonAdd = findViewById<Button>(R.id.buttonAdd)
         listText = findViewById<RecyclerView>(R.id.recyclerView)
 
+        allContacts = dbHelper.getContacts()
         changeList()
 
 
@@ -66,7 +69,7 @@ class MainActivity : AppCompatActivity() {
         if(text == ""){
             changeList()
         }else {
-            list = (dbHelper.getContacts().filter { (it.name+" "+it.surname).contains(text, ignoreCase = true)}).toMutableList()
+            list = (allContacts.filter { (it.name+" "+it.surname).contains(text, ignoreCase = true)}).toMutableList()
             changeListFiltered(list)
         }
     }
@@ -86,7 +89,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun changeList(){
-        list = dbHelper.getContacts()
+        list = allContacts
         adapter = RecyclerAdapter(list) {
             if(it != -1) {
                 val intent = Intent(this, ContactActivity::class.java)
@@ -104,6 +107,7 @@ class MainActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
+        allContacts = dbHelper.getContacts()
         changeList()
     }
 }
